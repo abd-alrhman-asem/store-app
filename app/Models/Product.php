@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\CreatedFromTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -12,10 +13,13 @@ class Product extends Model
     protected $fillable = ['name', 'description', 'price', 'category_id'];
     protected $appends = ['created_from'];
 
-//    public function category()
-//    {
-//        return $this->belongsTo(Category::class);
-//    }
+    /**
+     * @return BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
 
 
