@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProductController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,13 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
+// Include the routes defined in the products.php file located in the products directory
 include __DIR__ . "/products/products.php";
-//fallback route handling
-Route::fallback(function (){
-    return notFoundResponse('invalid Url , url not found');
-});
 
+// Include the routes defined in the categories.php file located in the categories directory
+include __DIR__ . "/Categories/categories.php";
+
+// Define a fallback route for handling invalid URLs
+// This will return a 404 Not Found response with a custom error message
+Route::fallback(function () {
+    return notFoundResponse('Invalid URL, URL not found');
+});
