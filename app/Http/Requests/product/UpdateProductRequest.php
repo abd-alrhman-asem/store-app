@@ -28,7 +28,7 @@ class UpdateProductRequest extends FormRequest
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'sometimes|required|numeric|min:0',
-//            'category_id' => 'sometimes|required|exists:categories,id',
+            'category_id' => 'sometimes|required|exists:categories,id',
         ];
     }
     protected function failedValidation(Validator $validator): void
