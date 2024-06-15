@@ -12,25 +12,23 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\string;
 use Ramsey\Uuid\Exception\InvalidArgumentException;
 use Throwable;
 
 
 class AuthService
 {
-
     /**
-     * Register a new user.
-     *
      * @param RegisterRequest $request
      * @return string
-     * @throws QueryException|Throwable
+     * @throws NoTokenException
+     * @throws Throwable
      */
     public function register(RegisterRequest $request): string
     {
         $data = $request->validated(); // Get all validated data
-        $user = $this->createUser($data, $request->ip());
+        $data['ip_address'] = $request->ip();
+        $user = $this->createUser($data);
         if (!$token = $user->createToken('auth_token')->plainTextToken)
             throw  new NoTokenException(
                 'there is some error in the recitation , please try again '
@@ -39,34 +37,20 @@ class AuthService
     }
 
     /**
-     * @param array $data
-     * @return string
-     */
-    private function formatAddress(array $data): string
-    {
-        return (
-            $data['postal_code'] .",".
-            $data['country'] .",".
-            $data['city']
-        );
-    }
-
-    /**
      * @param $data
      * @return mixed
      * @throws QueryException|Throwable
      */
-    public function createUser($data, $ip_address): User
+    public function createUser($data): User
     {
-        $address = $this->formatAddress($data);
-        return $user = User::create([
-            'ip_address' => $ip_address,
+
+        return User::create([
+            'ip_address' => $data['ip_address'],
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'date_of_birth' => $data['date_of_birth'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'address' => $address,
         ]);
     }
 
