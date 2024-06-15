@@ -95,7 +95,7 @@ if (!function_exists('error')) {
  * @return JsonResponse
  */
 if (!function_exists('loggedInSuccessfully')) {
-    function loggedInSuccessfully(string $token , $message = null  , $expiresIn = null , $user = null): JsonResponse
+    function loggedInSuccessfully(string $token , $message = null  , $expiresIn = null , $user = null , $statusCode = Response::HTTP_OK): JsonResponse
     {
         return success(
             $user,
@@ -105,6 +105,7 @@ if (!function_exists('loggedInSuccessfully')) {
                 'token_type' => 'bearer',
                 'expires_in' => $expiresIn ??  300 ,
             ],
+            $statusCode
         );
     }
 }
@@ -263,6 +264,15 @@ if (!function_exists('badRequestResponse')) {
         return error(
             $message,
             Response::HTTP_BAD_REQUEST
+        );
+    }
+
+}
+if (!function_exists('badRequestResponse')) {
+    function QueryError(string $message = ''): JsonResponse
+    {
+        return error(
+            $message
         );
     }
 

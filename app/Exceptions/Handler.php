@@ -32,36 +32,34 @@ class Handler extends ExceptionHandler
 
     public function register(): void
     {
-dump( 'handler register  ');
         $this->renderable(function (Throwable $e, $request) {
-            return $this->handleException($e);
+            //
         });
+    }
+
+    public function render($request, Throwable $e): JsonResponse
+    {
+        return $this->handleException($e);
     }
 
     protected function handleException(Throwable $e): JsonResponse
     {
-        dump( 'handler handle Exceptions   ');
-
         foreach ($this->exceptionHandlers as $exception => $handler) {
-//            dump($e);
             if ($e instanceof $exception) {
-//            dump('e');
                 return $this->{$handler}($e);
             }
         }
-
         return $this->handleDefaultException($e);
     }
     protected function handleNoTokenException(NoTokenException $e): JsonResponse
     {
         //TODO:REFACTOR THIS FUNCTION FOR THE RESPONSE
-        return notFoundResponse("Not Found: " . $e->getMessage());
+        return unauthorizedResponse("Not Found: " . $e->getMessage());
     }
-//    protected function handleQueryException(QueryException $e): JsonResponse
-//    {
-//        //TODO:REFACTOR THIS FUNCTION FOR THE RESPONSE
-//        return QueryError("database error : " . $e->getMessage());
-//    }
+    protected function handleQueryException(QueryException $e): JsonResponse
+    {
+        return QueryError("database error : " . $e->getMessage());
+    }
     protected function handleNotFoundHttpException(NotFoundHttpException $e): JsonResponse
     {
         return notFoundResponse("Not Found: " . $e->getMessage());

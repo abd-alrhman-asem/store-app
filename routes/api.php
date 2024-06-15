@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Include the routes defined in the products.php file located in the products directory
-include __DIR__ . "/products/products.php";
+Route::apiResource('/products' , ProductController::class);
+Route::apiResource('/categories' , CategoryController::class);
 
-// Include the routes defined in the categories.php file located in the categories directory
-include __DIR__ . "/Categories/categories.php";
+// Include the auth routes
+include __DIR__ . "/Auth/Auth.php";
 
 // Define a fallback route for handling invalid URLs
 // This will return a 404 Not Found response with a custom error message
