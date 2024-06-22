@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Foreign key with cascading delete
-            $table->string('user_ip');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade'); // Foreign key with cascading delete
+            $table->string('user_ip')->nullable();
             $table->foreignId('product_id')->constrained()->onDelete('cascade'); // Foreign key with cascading delete
             $table->integer('quantity');
             $table->enum('status', ['paid', 'waiting', 'delivered'])->default('waiting'); // Enum for status

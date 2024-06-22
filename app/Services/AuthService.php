@@ -31,8 +31,9 @@ class AuthService
         $user = $this->createUser($data);
         if (!$token = $user->createToken('auth_token')->plainTextToken)
             throw  new NoTokenException(
-                'there is some error in the recitation , please try again '
+                "There was an error in the operation, please try again"
             );
+
         return $token;
     }
 
@@ -43,15 +44,7 @@ class AuthService
      */
     public function createUser($data): User
     {
-
-        return User::create([
-            'ip_address' => $data['ip_address'],
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'date_of_birth' => $data['date_of_birth'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return User::create($data);
     }
 
     /**

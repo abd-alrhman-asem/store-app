@@ -23,7 +23,6 @@ class RegisterController extends Controller
     function __invoke(RegisterRequest $request): JsonResponse
     {
          $token = $this->authService->register($request);
-
         return loggedInSuccessfully(
             token:  $token ,
             message:  'Account created successfully.',

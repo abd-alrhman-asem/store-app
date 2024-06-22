@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -24,7 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'address',
-        'ip_address'
+        'ip_address',
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -48,9 +50,42 @@ class User extends Authenticatable
 
     ];
 
-    public function orders()
+    /**
+     * @return HasMany
+     */
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
+    public function userByIp(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'ip_address', 'ip_address');
+    }
+
+    /**
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        static::creating(function ($user) {
+            $user->address = $user->composeAddress();
+        });
+    }
+
+
+    /**
+     * Compose the address from postal_code, city, and country.
+     *
+     * @return string
+     */
+    protected function composeAddress(): string
+    {
+        $address = "{$this->postal_code}-{$this->city}-{$this->country}";
+        unset($this->postal_code, $this->city, $this->country);
+        return $address;
+    }
 }

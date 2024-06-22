@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('first_name', 50);
             $table->string('last_name', 50);
-            $table->string('ip_address')->default(null);
+            $table->string('ip_address')->unique();
             $table->string('address');
             $table->date('date_of_birth');
             $table->string('email', 100)->unique(); // Specify length

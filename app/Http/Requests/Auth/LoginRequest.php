@@ -24,8 +24,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
+            'email' => 'required|string|email',
+            'password' => 'required|string',
         ];
     }
 
@@ -37,9 +37,7 @@ class LoginRequest extends FormRequest
         return [
             'email.required' => 'The email field is required.',
             'email.email' => 'The email must be a valid email address.',
-            'email.max' => 'The email may not be greater than 255 characters.',
             'password.required' => 'The password field is required.',
-            'password.min' => 'The password must be at least 8 characters.',
         ];
     }
     protected function failedValidation(Validator $validator): void
