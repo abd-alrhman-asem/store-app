@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,13 @@ include __DIR__ . "/Auth/Auth.php";
 // This will return a 404 Not Found response with a custom error message
 Route::fallback(function () {
     return notFoundResponse('Invalid URL, URL not found');
+});
+
+Route::apiResource('orders', OrderController::class)
+    ->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::patch('orders/{order}', [OrderController::class, 'update'])
+        ->middleware('check.order.ownership');
+    Route::delete('orders/{order}', [OrderController::class, 'destroy'])
+        ->middleware('check.order.ownership');
 });
